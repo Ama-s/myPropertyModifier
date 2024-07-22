@@ -4,7 +4,7 @@ import java.io.IOException;
 import java.util.Properties;
 import java.util.Scanner;
 
-public class PropertyReader {
+public class PropertyModifier {
     public static void main(String[] args) throws IOException {
         // first off, use the properties class to load the properties from RandomPropertyFiles folder
         Properties properties = new Properties();
