@@ -1,34 +1,60 @@
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.*;
 import java.util.Properties;
 import java.util.Scanner;
 
 public class PropertyModifier {
     public static void main(String[] args) throws IOException {
-        // first off, use the properties class to load the properties from RandomPropertyFiles folder
         Properties properties = new Properties();
+        FileOutputStream outputFile = null;
 
-        String propertyFilePath = "C:/Users/USER/IdeaProjects/RandomPropertyFiles/src/config3.properties";
+        try {
+            FileReader propertyFileModifier = new FileReader("C:\\Users\\USER\\IdeaProjects\\RandomPropertyFiles\\src\\makeChanges.txt");
+            BufferedReader bufferedPropertyModifier = new BufferedReader(propertyFileModifier);
+            Scanner myChanges = new Scanner(bufferedPropertyModifier);
 
-        try (FileInputStream input = new FileInputStream(propertyFilePath)){
-            // to load the property file and make changes to it
-            properties.load(input);
+            while (myChanges.hasNextLine()) {
+                String line = myChanges.nextLine();
+                // checks whether there is another line in the input
+
+                if (line.startsWith("[") && line.endsWith("]")) {
+                    // [] indicates the start of a filepath, extract the filepath
+
+                    if (outputFile != null) {
+                        //  checks whether the outputFile object has been assigned a value
+
+                        // if yes it means an outputFile already exists, save it and close the existing file
+                        properties.store(outputFile, null);
+                        outputFile.close();
+
+                        // initialize a new properties class for the new file
+                        properties = new Properties();
+                    }
+                    line = line.replace("[", "").replace("]", "");
+
+                    // use the properties class to load the properties from RandomPropertyFiles folder
+                    properties.load(new FileInputStream(line));
+                    outputFile = new FileOutputStream(line);
+
+                } else if (line.contains("=")){
+                    String[] keyValuePair = line.split("=");
+                    if (keyValuePair.length == 2) {
+                        // Split the line into key-value pair
+
+                        String key = keyValuePair[0].trim();
+                        String newValue = keyValuePair[1].trim();
+
+                        // update the new value
+                        properties.setProperty(key, newValue);
+                        }
+                    }
+                }
+            } finally {
+                if (outputFile != null) {
+                    // save the last updated file and close
+                    properties.store(outputFile, null);
+                    outputFile.close();
+                }
+            }
         }
 
-        // to make changes to the properties
-        Scanner scanner = new Scanner(System.in);
-        System.out.print("Enter the key you want to update its value: ");
-        String key = scanner.nextLine();
-
-        System.out.print("Enter the new value for this key: ");
-        String newValue = scanner.nextLine();
-
-        properties.setProperty(key, newValue);
-
-        // save the changes you have made
-        try (FileOutputStream output = new FileOutputStream(propertyFilePath)) {
-            properties.store(output, null);
-        }
-    }
 }
