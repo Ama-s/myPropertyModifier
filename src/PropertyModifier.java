@@ -17,7 +17,7 @@ public class PropertyModifier {
                 // checks whether there is another line in the input
 
                 if (line.startsWith("[") && line.endsWith("]")) {
-                    // [] indicates the start of a filepath, extract the filepath
+                    // [] indicates the start of a filepath, it extracts the filepath
 
                     if (outputFile != null) {
                         //  checks whether the outputFile object has been assigned a value
