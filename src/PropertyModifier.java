@@ -13,7 +13,7 @@ public class PropertyModifier {
 
                 if (line.startsWith("[") && line.endsWith("]")) { // [] indicates the start of a filepath, it extracts the filepath
 
-                    if (outputFile != null) { //  checks whether the outputFile object has been assigned a value
+                    if (outputFile != null) { // checks whether the outputFile object has been assigned a value
 
                         // Manually write properties to the output file exactly as they are
                         writeProperties(properties, outputFile);
